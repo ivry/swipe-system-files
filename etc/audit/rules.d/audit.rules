@@ -1,0 +1,26 @@
+## First rule - delete all
+-D
+
+## Increase the buffers to survive stress events.
+## Make this bigger for busy systems
+-b 8192
+
+## Set failure mode to syslog
+-f 1
+
+-w /var/log/ -p rwa -k audit_rules_log_files_accessed
+-w /etc/passwd -p wa -k audit_rules_passwd_changes
+-w /etc/ -p wa -k audit_rules_user_access_to_system_files
+-w /var/log/ -p wa -k audit_rules_user_access_to_system_files
+-w /usr/sbin/ -p wa -k audit_rules_user_access_to_system_files
+-w /usr/bin/ -p wa -k audit_rules_user_access_to_system_files
+-w /sbin/chkconfig -p x -k audit_rules_system_service_change
+-w /sbin/service -p x -k audit_rules_system_service_change
+-w /usr/sbin/useradd -p x -k audit_rules_system_service_change
+-w /usr/sbin/userdel -p x -k audit_rules_system_service_change
+-w /usr/sbin/passwd -p x -k audit_rules_system_service_change
+# log access to app server’s source files that has clear card data (in run-time)
+-w /home/swipe/swipe/app/lib/ -k audit_rules_user_access_to_swipe_files
+# system call rules
+-a always,exit -F arch=b64 -S adjtimex -S settimeofday -k audit_rules_time_change
+
